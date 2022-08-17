@@ -15,6 +15,8 @@ jobs:
         with:
           java-version: '18'
           distribution: 'adopt'
+      - name: Set Test Java Runtime Environment variable
+        run: echo "JAVA_TEST_HOME=${{ steps.setup-jre.outputs.path }}" >> $GITHUB_ENV
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@859c33240bd026ce8d5f711f5adcc65c2f8eafc1
       - name: Publish package
