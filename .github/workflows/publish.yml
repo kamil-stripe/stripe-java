@@ -1,0 +1,25 @@
+name: Publish package to GitHub Packages
+on:
+  push:
+    branches:
+      - master
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '18'
+          distribution: 'adopt'
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@859c33240bd026ce8d5f711f5adcc65c2f8eafc1
+      - name: Publish package
+        uses: gradle/gradle-build-action@a81a96bcb6b54e5ea2a13ff434e3faac71a4e160
+        with:
+          arguments: publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ARTIFACT_TOKEN }}
