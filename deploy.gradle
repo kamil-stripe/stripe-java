@@ -77,7 +77,7 @@ afterEvaluate { project ->
         repositories {
             maven {
                 name = "GitHubPackages"
-                url = "https://maven.pkg.github.com/kamil-stripe/stripe-java-next"
+                url = "https://maven.pkg.github.com/kamil-stripe/stripe-java"
                 credentials {
                     username = System.getenv("GH_ARTIFACT_ACTOR")
                     password = System.getenv("GH_ARTIFACT_TOKEN")
