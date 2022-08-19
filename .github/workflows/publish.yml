@@ -25,5 +25,5 @@ jobs:
         with:
           arguments: publish
         env:
-          GH_ARTIFACT_TOKEN: ${{ secrets.GH_ARTIFACT_TOKEN }}
+          GH_ARTIFACT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_ARTIFACT_ACTOR: ${{ secrets.GH_ARTIFACT_ACTOR }}
