@@ -25,11 +25,11 @@ def getSnapshotRepositoryUrl() {
 }
 
 def getRepositoryUsername() {
-    return hasProperty("GH_ARTIFACT_ACTOR") ? GH_ARTIFACT_ACTOR : ""
+    return System.getenv("GH_ARTIFACT_ACTOR") ?: ""
 }
 
 def getRepositoryPassword() {
-    return hasProperty("GH_ARTIFACT_TOKEN") ? GH_ARTIFACT_TOKEN : ""
+    return System.getenv("GH_ARTIFACT_TOKEN") ?: ""
 }
 
 afterEvaluate { project ->
