@@ -20,7 +20,9 @@ def getReleaseRepositoryUrl() {
 }
 
 def getSnapshotRepositoryUrl() {
-    throw new GradleException("Snapshot release not supported in GitHub Artifact repository")
+def getReleaseRepositoryUrl() {
+    return hasProperty("SNAPSHOT_REPOSITORY_URL") ? SNAPSHOT_REPOSITORY_URL
+            : "https://maven.pkg.github.com/kamil-stripe/stripe-java"
 }
 
 def getRepositoryUsername() {
