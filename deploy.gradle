@@ -8,9 +8,27 @@
 
 apply plugin: "maven-publish"
 apply plugin: "signing"
+apply plugin: "io.codearte.nexus-staging"
 
 def isReleaseBuild() {
     return VERSION_NAME.contains("SNAPSHOT") == false
+}
+
+def getReleaseRepositoryUrl() {
+    return hasProperty("RELEASE_REPOSITORY_URL") ? RELEASE_REPOSITORY_URL
+            : "https://maven.pkg.github.com/kamil-stripe/stripe-java"
+}
+
+def getSnapshotRepositoryUrl() {
+    throw new GradleException("Snapshot release not supported in GitHub Artifact repository")
+}
+
+def getRepositoryUsername() {
+    return hasProperty("GH_ARTIFACT_ACTOR") ? GH_ARTIFACT_ACTOR : ""
+}
+
+def getRepositoryPassword() {
+    return hasProperty("GH_ARTIFACT_TOKEN") ? GH_ARTIFACT_TOKEN : ""
 }
 
 afterEvaluate { project ->
@@ -32,6 +50,14 @@ afterEvaluate { project ->
         required { isReleaseBuild() && gradle.taskGraph.hasTask("publish") }
         useGpgCmd()
         sign publishing.publications
+    }
+
+    nexusStaging {
+        packageGroup = GROUP
+        numberOfRetries = 40
+        delayBetweenRetriesInMillis = 4000
+        username = getRepositoryUsername()
+        password = getRepositoryPassword()
     }
 
     publishing {
@@ -77,10 +103,12 @@ afterEvaluate { project ->
         repositories {
             maven {
                 name = "GitHubPackages"
-                url = "https://maven.pkg.github.com/kamil-stripe/stripe-java"
+                def releasesRepoUrl = getReleaseRepositoryUrl()
+                def snapshotsRepoUrl = getSnapshotRepositoryUrl()
+                url = isReleaseBuild() ? releasesRepoUrl : snapshotsRepoUrl
                 credentials {
-                    username = System.getenv("GH_ARTIFACT_ACTOR")
-                    password = System.getenv("GH_ARTIFACT_TOKEN")
+                    username = getRepositoryUsername()
+                    password = getRepositoryPassword()
                 }
             }
         }
