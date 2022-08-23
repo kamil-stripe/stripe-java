@@ -20,7 +20,6 @@ def getReleaseRepositoryUrl() {
 }
 
 def getSnapshotRepositoryUrl() {
-def getReleaseRepositoryUrl() {
     return hasProperty("SNAPSHOT_REPOSITORY_URL") ? SNAPSHOT_REPOSITORY_URL
             : "https://maven.pkg.github.com/kamil-stripe/stripe-java"
 }
